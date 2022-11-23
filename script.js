@@ -70,29 +70,29 @@ int8.addEventListener('click', () => { input.innerHTML += 8 });
 int9.addEventListener('click', () => { input.innerHTML += 9 });
 int0.addEventListener('click', () => { input.innerHTML += 0 });
 
-window.addEventListener('keydown', (e) =>{
+window.addEventListener('keydown', (e) => {
     const event = new Event('click');
     const key = document.querySelector(`button[data-key="${e.code}"]`)
-    if(e.key==0) int0.dispatchEvent(event);
-    if(e.key==1) int1.dispatchEvent(event);
-    if(e.key==2) int2.dispatchEvent(event);
-    if(e.key==3) int3.dispatchEvent(event);
-    if(e.key==4) int4.dispatchEvent(event);
-    if(e.key==5) int5.dispatchEvent(event);
-    if(e.key==6) int6.dispatchEvent(event);
-    if(e.key==7) int7.dispatchEvent(event);
-    if(e.key==8) int8.dispatchEvent(event);
-    if(e.key==9) int9.dispatchEvent(event);
-    if(e.key=='.') coma.dispatchEvent(event);
-    if(e.key=='/') divideButton.dispatchEvent(event);
-    if(e.key=='*') multiplyButton.dispatchEvent(event);
-    if(e.key=='+') addButton.dispatchEvent(event);
-    if(e.key=='-') subtractButton.dispatchEvent(event);
-    if(e.code=='NumpadEnter') equalButton.dispatchEvent(event);
-    if(e.code=='Backspace') erase.dispatchEvent(event);
-    if(e.code=='Delete') clear.dispatchEvent(event);
+    if (e.key == 0) int0.dispatchEvent(event);
+    if (e.key == 1) int1.dispatchEvent(event);
+    if (e.key == 2) int2.dispatchEvent(event);
+    if (e.key == 3) int3.dispatchEvent(event);
+    if (e.key == 4) int4.dispatchEvent(event);
+    if (e.key == 5) int5.dispatchEvent(event);
+    if (e.key == 6) int6.dispatchEvent(event);
+    if (e.key == 7) int7.dispatchEvent(event);
+    if (e.key == 8) int8.dispatchEvent(event);
+    if (e.key == 9) int9.dispatchEvent(event);
+    if (e.key == '.') coma.dispatchEvent(event);
+    if (e.key == '/') divideButton.dispatchEvent(event);
+    if (e.key == '*') multiplyButton.dispatchEvent(event);
+    if (e.key == '+') addButton.dispatchEvent(event);
+    if (e.key == '-') subtractButton.dispatchEvent(event);
+    if (e.code == 'NumpadEnter') equalButton.dispatchEvent(event);
+    if (e.code == 'Backspace') erase.dispatchEvent(event);
+    if (e.code == 'Delete') clear.dispatchEvent(event);
     //alert(e.code)
-  });
+});
 
 function add(a, b) {
     return a + b;
@@ -146,7 +146,7 @@ function checkOperator() {
 
 }
 function getArray() {
-    history.innerHTML = input.innerHTML
+    
     let numbers = [];
     let toConvert = input.innerHTML;
     while (true) {
@@ -159,10 +159,16 @@ function getArray() {
     }
     return numbers
 }
+function multipleComaCheck(formula) {
+    (formula.indexOf('.') !== -1)  
+}
 function computing() {
     let formula = getArray();
     let operation = '';
+    if(formula.indexOf('.') !== -1) return; 
+    history.innerHTML = input.innerHTML
     while (true) {
+        
         while (true) {
             if (formula.indexOf('*') !== -1) {
                 let indexMulti = formula.indexOf('*');
@@ -186,13 +192,12 @@ function computing() {
             operation = operate(formula[indexSub - 1], formula[indexSub], formula[indexSub + 1]);
             formula.splice(indexSub - 1, 3, operation);
         }
-        if(formula.length===1){
-            input.innerHTML=formula[0];
+        if (formula.length === 1) {
+            input.innerHTML = formula[0];
             break;
         }
-}}
-let xxx = [0, 6, 7, '*', '÷']
-console.log(xxx)
+    }
+}
 
 /*
 I have string consisting of numbers and operators '3+434-2/3'
