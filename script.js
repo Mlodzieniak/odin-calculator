@@ -27,37 +27,37 @@ erase.addEventListener('click', () => {
     input.innerHTML = input.innerHTML.slice(0, -1);
 })
 divideButton.addEventListener('click', () => {
-    if(checkOperator()===true) {
+    if (checkOperator() === true) {
         input.innerHTML += '&div;'
     }
     return
 })
 multiplyButton.addEventListener('click', () => {
-    if(checkOperator()===true) {
+    if (checkOperator() === true) {
         input.innerHTML += '*'
     }
     return
 })
-subtractButton.addEventListener('click', ()=>{
-    if(checkOperator()===true) {
+subtractButton.addEventListener('click', () => {
+    if (checkOperator() === true) {
         input.innerHTML += '-'
     }
     return
 })
 addButton.addEventListener('click', () => {
-    if(checkOperator()===true) {
+    if (checkOperator() === true) {
         input.innerHTML += '+'
     }
     return
 })
 coma.addEventListener('click', () => {
-    if(checkOperator()===true) {
+    if (checkOperator() === true) {
         input.innerHTML += '.'
     }
     return
 })
 
-equalButton.addEventListener('click', () => getArray())
+equalButton.addEventListener('click', () => computing())
 int1.addEventListener('click', () => { input.innerHTML += 1 });
 int2.addEventListener('click', () => { input.innerHTML += 2 });
 int3.addEventListener('click', () => { input.innerHTML += 3 });
@@ -97,12 +97,11 @@ function operate(a, operator, b) {
             return divide(a, b)
     }
 }
-function checkOperator(){
+function checkOperator() {
     if (input.innerHTML == '') {
         return false
     }
-    console.log(input.innerHTML.charAt(input.innerHTML.length-1))
-    switch(input.innerHTML.charAt(input.innerHTML.length-1)){
+    switch (input.innerHTML.charAt(input.innerHTML.length - 1)) {
         case "+":
             return false
 
@@ -114,7 +113,7 @@ function checkOperator(){
 
         case "&div;":
             return false
-        
+
         case ".":
             return false
     }
@@ -123,25 +122,55 @@ function checkOperator(){
 }
 function getArray() {
 
-    const xArray = input.innerHTML
-    let numbers = []
+    const xArray = input.innerHTML;
+    let numbers = [];
     let toConvert = xArray;
-
     while (true) {
-        if (isNaN(parseFloat(toConvert))) {
-            toConvert.pop();
-            console.log('x');
-            continue;
-        } else {
-            numbers.push(toConvert);
-            break;
-        }
+        numbers.push(parseFloat(toConvert));
+        toConvert = toConvert.replace(numbers[numbers.length - 1], '');
+        if (toConvert.length == 0) break;
+        numbers.push(toConvert.charAt(0))
+        toConvert = toConvert.replace(numbers[numbers.length - 1], '');
+        if (toConvert.length == 0) break;
     }
-    console.log(numbers);
+    return numbers
 }
-let myString = '34+434-2/3'
-let parse = parseFloat(myString);
-console.log(parse)
+function computing() {
+    let formula = getArray();
+    let solution = '';
+    let operation = '';
+    while (true) {
+        while (true) {
+            if (formula.indexOf('*') !== -1) {
+                let indexMulti = formula.indexOf('*');
+                operation = operate(formula[indexMulti - 1], formula[indexMulti], formula[indexMulti + 1]);
+                formula.splice(indexMulti - 1, 3, operation);
+            }
+            if (formula.indexOf('&div;') !== -1) {
+                let indexDiv = formula.indexOf('&div;');
+                operation = operate(formula[indexDiv - 1], formula[indexDiv], formula[indexDiv + 1]);
+                formula.splice(indexDiv - 1, 3, operation);
+            }
+            console.log(formula)
+            console.log('no* or /')
+            break
+        }
+        if (formula.indexOf('+') !== -1) {
+            let indexAdd = formula.indexOf('+');
+            operation = operate(formula[indexAdd - 1], formula[indexAdd], formula[indexAdd + 1]);
+            formula.splice(indexAdd - 1, 3, operation);
+        }
+        if (formula.indexOf('-') !== -1) {
+            let indexSub = formula.indexOf('-');
+            operation = operate(formula[indexSub - 1], formula[indexSub], formula[indexSub + 1]);
+            formula.splice(indexSub - 1, 3, operation);
+        }
+        if(formula.length===1){
+            input.innerHTML=formula[0];
+            break
+        }
+}}
+
 /*
 I have string consisting of numbers and operators '3+434-2/3'
 I need to separate numbers from each other and operators.
@@ -155,7 +184,18 @@ Create a copy of original String but without 3. '+434-2/3"
 After we found one number we can be sure next comes operator.
 save operator at array[1] array.push()
 repeat from line 3.
-Loop ends when string is empty.
+ITS ALL WRONG
+
+New way!
+parse to float content of display.
+Content of diplay = '21+2*82'
+store content in another variable CoD = content of display
+inloop
+parse returns 21. Save 21 in array[0]
+remove 21 from CoD. Now CoD should contain '+2*82'
+array.push(CoD.charAt(0)). remove + from CoD
+if CoD is empty end the loop
+
 If array[array.length-1] is Nan then do nothing and display message 'incorrect formula'
 
 Check if array consist multiplication or division (* or /)
@@ -169,3 +209,5 @@ create new array where:
 If there is no * or / simply operate(array[0], array[1], array[2])
 When array consist only of single positon then feed it to output.innerHTML
 */
+
+

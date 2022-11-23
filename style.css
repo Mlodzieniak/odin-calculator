@@ -40,7 +40,7 @@ p{
 .editors,
 .operators,
 .integers{
-    grid-gap: 0.3rem;
+    grid-gap: 0.6rem;
 }
 #display{
     grid-area: display;
