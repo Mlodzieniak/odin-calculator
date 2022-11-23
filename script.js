@@ -159,9 +159,6 @@ function getArray() {
     }
     return numbers
 }
-function multipleComaCheck(formula) {
-    (formula.indexOf('.') !== -1)  
-}
 function computing() {
     let formula = getArray();
     let operation = '';
