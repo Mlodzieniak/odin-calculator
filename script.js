@@ -1,4 +1,5 @@
 const input = document.querySelector('#input');
+const history = document.querySelector('#history');
 const erase = document.querySelector('#erase');
 const clear = document.querySelector('#clear');
 const divideButton = document.querySelector('#divide');
@@ -19,8 +20,8 @@ const int0 = document.querySelector('#int0');
 const coma = document.querySelector('#coma');
 const senpai = document.querySelector('#senpai');
 
-const main = input.innerHTML
 clear.addEventListener('click', () => {
+    // history.innerHTML = input.innerHTML;
     input.innerHTML = '';
 })
 erase.addEventListener('click', () => {
@@ -28,7 +29,7 @@ erase.addEventListener('click', () => {
 })
 divideButton.addEventListener('click', () => {
     if (checkOperator() === true) {
-        input.innerHTML += '&div;'
+        input.innerHTML += '÷'
     }
     return
 })
@@ -69,6 +70,30 @@ int8.addEventListener('click', () => { input.innerHTML += 8 });
 int9.addEventListener('click', () => { input.innerHTML += 9 });
 int0.addEventListener('click', () => { input.innerHTML += 0 });
 
+window.addEventListener('keydown', (e) =>{
+    const event = new Event('click');
+    const key = document.querySelector(`button[data-key="${e.code}"]`)
+    if(e.key==0) int0.dispatchEvent(event);
+    if(e.key==1) int1.dispatchEvent(event);
+    if(e.key==2) int2.dispatchEvent(event);
+    if(e.key==3) int3.dispatchEvent(event);
+    if(e.key==4) int4.dispatchEvent(event);
+    if(e.key==5) int5.dispatchEvent(event);
+    if(e.key==6) int6.dispatchEvent(event);
+    if(e.key==7) int7.dispatchEvent(event);
+    if(e.key==8) int8.dispatchEvent(event);
+    if(e.key==9) int9.dispatchEvent(event);
+    if(e.key=='.') coma.dispatchEvent(event);
+    if(e.key=='/') divideButton.dispatchEvent(event);
+    if(e.key=='*') multiplyButton.dispatchEvent(event);
+    if(e.key=='+') addButton.dispatchEvent(event);
+    if(e.key=='-') subtractButton.dispatchEvent(event);
+    if(e.code=='NumpadEnter') equalButton.dispatchEvent(event);
+    if(e.code=='Backspace') erase.dispatchEvent(event);
+    if(e.code=='Delete') clear.dispatchEvent(event);
+    //alert(e.code)
+  });
+
 function add(a, b) {
     return a + b;
 }
@@ -93,7 +118,7 @@ function operate(a, operator, b) {
         case "*":
             return multiply(a, b)
 
-        case "&div;":
+        case "÷":
             return divide(a, b)
     }
 }
@@ -111,7 +136,7 @@ function checkOperator() {
         case "*":
             return false
 
-        case "&div;":
+        case "÷":
             return false
 
         case ".":
@@ -121,10 +146,9 @@ function checkOperator() {
 
 }
 function getArray() {
-
-    const xArray = input.innerHTML;
+    history.innerHTML = input.innerHTML
     let numbers = [];
-    let toConvert = xArray;
+    let toConvert = input.innerHTML;
     while (true) {
         numbers.push(parseFloat(toConvert));
         toConvert = toConvert.replace(numbers[numbers.length - 1], '');
@@ -137,7 +161,6 @@ function getArray() {
 }
 function computing() {
     let formula = getArray();
-    let solution = '';
     let operation = '';
     while (true) {
         while (true) {
@@ -146,14 +169,12 @@ function computing() {
                 operation = operate(formula[indexMulti - 1], formula[indexMulti], formula[indexMulti + 1]);
                 formula.splice(indexMulti - 1, 3, operation);
             }
-            if (formula.indexOf('&div;') !== -1) {
-                let indexDiv = formula.indexOf('&div;');
+            if (formula.indexOf('÷') !== -1) {
+                let indexDiv = formula.indexOf('÷');
                 operation = operate(formula[indexDiv - 1], formula[indexDiv], formula[indexDiv + 1]);
                 formula.splice(indexDiv - 1, 3, operation);
             }
-            console.log(formula)
-            console.log('no* or /')
-            break
+            break;
         }
         if (formula.indexOf('+') !== -1) {
             let indexAdd = formula.indexOf('+');
@@ -167,24 +188,15 @@ function computing() {
         }
         if(formula.length===1){
             input.innerHTML=formula[0];
-            break
+            break;
         }
 }}
+let xxx = [0, 6, 7, '*', '÷']
+console.log(xxx)
 
 /*
 I have string consisting of numbers and operators '3+434-2/3'
 I need to separate numbers from each other and operators.
-
-
-Try to parseint(string). Type can only change when string consists of numbers.
-If resoult of parseint equals to Nan than remove last character from string.
-Do it till parseint equals number. In this case "3"
-Save this number in array at first position. array[0]. array.push()
-Create a copy of original String but without 3. '+434-2/3"
-After we found one number we can be sure next comes operator.
-save operator at array[1] array.push()
-repeat from line 3.
-ITS ALL WRONG
 
 New way!
 parse to float content of display.
